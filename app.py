@@ -3,23 +3,27 @@ import numpy as np
 import tensorflow as tf
 from PIL import Image
 import os
-import tempfile
-import requests
 from utils import preprocess_image
 
+# Model paths
+MOUNTED_MODEL_PATH = "/mnt/models/tea_model.h5"
 MODEL_LOCAL_PATH = "models/tea_model.h5"
-MODEL_GCS_URL = "https://storage.googleapis.com/tea-leaf-assets/models/tea_model.h5"
 
 @st.cache_resource
 def load_model():
     try:
-        if os.path.exists(MODEL_LOCAL_PATH):
+        if os.path.exists(MOUNTED_MODEL_PATH):
+            st.info("📦 Loading model from mounted volume...")
+            return tf.keras.models.load_model(MOUNTED_MODEL_PATH)
+
+        elif os.path.exists(MODEL_LOCAL_PATH):
+            st.info("💾 Loading model from local path...")
             return tf.keras.models.load_model(MODEL_LOCAL_PATH)
+
         else:
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".h5") as tmp:
-                response = requests.get(MODEL_GCS_URL)
-                tmp.write(response.content)
-                return tf.keras.models.load_model(tmp.name)
+            st.error("❌ No model found at either mounted volume or local path.")
+            st.stop()
+
     except Exception as e:
         st.error(f"❌ Model loading failed: {e}")
         st.stop()
@@ -65,7 +69,7 @@ if uploaded_file:
 
         st.subheader("🔍 Prediction")
         if confidence < 0.6:
-            st.warning(f"⚠️ Low confidence: {confidence:.2f}")
+            st.warning(f"⚠️ Low confidence: {confidence:.2}")
         else:
             st.success(f"✅ Predicted Class: {predicted_class}")
             st.info(f"💡 {class_explanations[predicted_class]}")
