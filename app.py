@@ -5,9 +5,9 @@ from PIL import Image
 import os
 from utils import preprocess_image
 
-# Model paths
-MOUNTED_MODEL_PATH = "/models/tea_model.h5"
-MODEL_LOCAL_PATH = "models/tea_model.h5"
+# Model paths (updated to use .keras format)
+MOUNTED_MODEL_PATH = "/models/tea_model.keras"
+MODEL_LOCAL_PATH = "models/tea_model.keras"
 
 @st.cache_resource
 def load_model():
@@ -69,7 +69,7 @@ if uploaded_file:
 
         st.subheader("🔍 Prediction")
         if confidence < 0.6:
-            st.warning(f"⚠️ Low confidence: {confidence:.2}")
+            st.warning(f"⚠️ Low confidence: {confidence:.2f}")
         else:
             st.success(f"✅ Predicted Class: {predicted_class}")
             st.info(f"💡 {class_explanations[predicted_class]}")

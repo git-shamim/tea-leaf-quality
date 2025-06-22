@@ -6,13 +6,16 @@ from tensorflow.keras.optimizers import Adam  # ✅ For M1/M2 Macs
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 
-
 # Paths
 DATA_DIR = "data/annoted/"
-MODEL_PATH = "models/tea_model.h5"
+MODEL_DIR = "models"
+MODEL_PATH = os.path.join(MODEL_DIR, "tea_model.keras")  # ✅ Save in .keras format
 IMG_SIZE = (224, 224)
 BATCH_SIZE = 32
 EPOCHS = 30
+
+# Ensure model directory exists
+os.makedirs(MODEL_DIR, exist_ok=True)
 
 # Data generators
 train_datagen = ImageDataGenerator(
@@ -62,13 +65,17 @@ model.compile(
     metrics=['accuracy']
 )
 
+# Show model architecture
+model.summary()
+
+# Callbacks
 callbacks = [
     EarlyStopping(monitor='val_loss', patience=4, restore_best_weights=True),
     ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=2),
     ModelCheckpoint(MODEL_PATH, monitor='val_loss', save_best_only=True)
 ]
 
-# Train
+# Train the model
 history = model.fit(
     train_gen,
     validation_data=val_gen,
