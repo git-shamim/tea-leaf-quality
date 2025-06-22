@@ -6,7 +6,7 @@ import os
 from utils import preprocess_image
 
 # Model paths
-MOUNTED_MODEL_PATH = "models/tea_model.h5"
+MOUNTED_MODEL_PATH = "/models/tea_model.h5"
 MODEL_LOCAL_PATH = "models/tea_model.h5"
 
 @st.cache_resource
