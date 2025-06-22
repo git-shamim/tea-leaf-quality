@@ -2,12 +2,13 @@ import os
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Input, Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-from tensorflow.keras.optimizers.legacy import Adam  # ✅ For M1/M2 Macs
+from tensorflow.keras.optimizers import Adam  # ✅ For M1/M2 Macs
 from tensorflow.keras.regularizers import l2
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, ModelCheckpoint
 
+
 # Paths
-DATA_DIR = "data/annoted"
+DATA_DIR = "data/annoted/"
 MODEL_PATH = "models/tea_model.h5"
 IMG_SIZE = (224, 224)
 BATCH_SIZE = 32
