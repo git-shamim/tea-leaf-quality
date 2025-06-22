@@ -5,25 +5,22 @@ from PIL import Image
 import os
 from utils import preprocess_image
 
-# Model paths (updated to use .keras format)
-MOUNTED_MODEL_PATH = "/models/tea_model.keras"
-MODEL_LOCAL_PATH = "models/tea_model.keras"
+# Model paths
+MOUNTED_MODEL_PATH = "/models/tea_model.h5"
+MODEL_LOCAL_PATH = "models/tea_model.h5"
 
 @st.cache_resource
 def load_model():
     try:
         if os.path.exists(MOUNTED_MODEL_PATH):
             st.info("📦 Loading model from mounted volume...")
-            return tf.keras.models.load_model(MOUNTED_MODEL_PATH)
-
+            return tf.keras.models.load_model(MOUNTED_MODEL_PATH, compile=False)
         elif os.path.exists(MODEL_LOCAL_PATH):
             st.info("💾 Loading model from local path...")
-            return tf.keras.models.load_model(MODEL_LOCAL_PATH)
-
+            return tf.keras.models.load_model(MODEL_LOCAL_PATH, compile=False)
         else:
             st.error("❌ No model found at either mounted volume or local path.")
             st.stop()
-
     except Exception as e:
         st.error(f"❌ Model loading failed: {e}")
         st.stop()
@@ -68,14 +65,13 @@ if uploaded_file:
         predicted_class = class_names[predicted_class_index]
 
         st.subheader("🔍 Prediction")
+
         if confidence < 0.7:
-            st.warning(f"⚠️ The uploaded image doesn't seem to be a valid tea leaf. "
-                       f"Confidence: {confidence:.2%}. Please upload a clear tea leaf image.")
+            st.warning(f"⚠️ Model is not confident enough ({confidence:.2%}). Please upload a valid tea leaf image.")
         else:
             st.success(f"✅ Predicted Class: {predicted_class}")
             st.info(f"💡 {class_explanations[predicted_class]}")
             st.markdown(f"**Confidence:** {confidence:.2%}")
-
 
     except Exception as e:
         st.error(f"❌ Could not process the image. Error: {e}")
