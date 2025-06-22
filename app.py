@@ -66,7 +66,7 @@ if uploaded_file:
 
         st.subheader("🔍 Prediction")
 
-        if confidence < 0.7:
+        if confidence < 0.8:
             st.warning(f"⚠️ Model is not confident enough ({confidence:.2%}). Please upload a valid tea leaf image.")
         else:
             st.success(f"✅ Predicted Class: {predicted_class}")

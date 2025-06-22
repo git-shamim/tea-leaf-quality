@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .venv/
 data/
+models/
+.idea/
+.DS_Store

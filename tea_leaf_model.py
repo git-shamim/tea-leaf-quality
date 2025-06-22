@@ -10,7 +10,7 @@ from tensorflow.keras.regularizers import l2
 # Paths
 DATA_DIR = "data/annoted/"
 MODEL_DIR = "models"
-MODEL_PATH = os.path.join(MODEL_DIR, "tea_model.keras")
+MODEL_PATH = os.path.join(MODEL_DIR, "tea_model.h5")  # ✅ .h5 format
 IMG_SIZE = (224, 224)
 BATCH_SIZE = 32
 EPOCHS = 30
@@ -79,7 +79,7 @@ model.compile(
     metrics=['accuracy']
 )
 
-# ✅ Summary
+# ✅ Print Summary
 model.summary()
 
 # ✅ Callbacks
