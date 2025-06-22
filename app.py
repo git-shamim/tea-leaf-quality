@@ -68,13 +68,14 @@ if uploaded_file:
         predicted_class = class_names[predicted_class_index]
 
         st.subheader("🔍 Prediction")
-        if confidence < 0.6:
-            st.warning(f"⚠️ Low confidence: {confidence:.2f}")
+        if confidence < 0.7:
+            st.warning(f"⚠️ The uploaded image doesn't seem to be a valid tea leaf. "
+                       f"Confidence: {confidence:.2%}. Please upload a clear tea leaf image.")
         else:
             st.success(f"✅ Predicted Class: {predicted_class}")
             st.info(f"💡 {class_explanations[predicted_class]}")
+            st.markdown(f"**Confidence:** {confidence:.2%}")
 
-        st.markdown(f"**Confidence:** {confidence:.2%}")
 
     except Exception as e:
         st.error(f"❌ Could not process the image. Error: {e}")
